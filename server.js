@@ -6,32 +6,32 @@ app.get('/calculadora', (req, res) => {
     const n2 = parseFloat(numDois);
 
     if (isNaN(n1) || isNaN(n2)) {
-      return res.status(400).send('Erro: numUm e numDois devem ser números válidos.');
+      return res.status(400).send('Erro: os dois números devem ser válidos:');
     }
 
     let resultado;
-    let operacaoNome;
+    let nomeDaOperacao;
 
-    if (operacao === 'soma') {
+    if (nomeDaOperacao == 'soma') {
       resultado = n1 + n2;
-      operacaoNome = 'soma';
-    } else if (operacao === 'subtracao') {
+      nomeDaOperacao = 'soma';
+    } else if (nomeDaOperacao == 'subtracao') {
       resultado = n1 - n2;
-      operacaoNome = 'subtração';
-    } else if (operacao === 'multiplicacao') {
+      nomeDaOperacao = 'subtração';
+    } else if (nomeDaOperacao == 'multiplicacao') {
       resultado = n1 * n2;
-      operacaoNome = 'multiplicação';
-    } else if (operacao === 'divisao') {
-      if (n2 === 0) {
-        return res.status(400).send('Erro: Não é possível dividir por zero.');
+      nomeDaOperacao = 'multiplicação';
+    } else if (nomeDaOperacao == 'divisao') {
+      if (n2 == 0) {
+        return res.status(400).send('Erro: Não pode dividir por zero');
       }
       resultado = n1 / n2;
-      operacaoNome = 'divisão';
+      nomeDaOperacao = 'divisão';
     } else {
-      return res.status(400).send('Erro: Operação inválida. Use soma, subtracao, multiplicacao ou divisao.');
+      return res.status(400).send('Erro: Você escolheu uma forma não valida de operação, Use soma, subtracao, multiplicacao ou divisao.');
     }
 
-    res.send(`Resultado da ${operacaoNome}: ${resultado}`);
+    res.send(`O resultado da: ${nomeDaOperacao} é: ${resultado}`);
   } catch (error) {
     res.status(500).send('Erro: Falha no servidor.');
   }
