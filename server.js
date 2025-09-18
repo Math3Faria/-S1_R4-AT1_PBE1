@@ -1,24 +1,32 @@
-//atividade 05
-app.get('/saudacao/:nome', (req, res) => {
+//atividade 06
+app.get('/imc', (req, res) => {
   try {
-    const nome = req.params.nome;
-    const hora = parseInt(req.query.hora);
+    const peso = parseFloat(req.query.peso);
+    const altura = parseFloat(req.query.altura);
 
-    if (isNaN(hora) || hora < 0 || hora > 23) {
-      return res.status(400).send('Erro: A hora deve ser um número entre 0 e 23.');
+    if (isNaN(peso) || isNaN(altura) || altura <= 0) {
+      return res.status(400).send('Erro: Peso e altura devem ser números válidos e a altura deve ser maior que zero.');
     }
 
-    let saudacao;
-    if (hora >= 6 && hora < 12) {
-      saudacao = 'Bom dia';
-    } else if (hora >= 12 && hora < 18) {
-      saudacao = 'Boa tarde';
+    const imc = peso / (altura * altura);
+    let classificacao;
+
+    if (imc < 18.5) {
+      classificacao = 'Abaixo do peso';
+    } else if (imc >= 18.5 && imc < 25) {
+      classificacao = 'Peso normal';
+    } else if (imc >= 25 && imc < 30) {
+      classificacao = 'Sobrepeso';
     } else {
-      saudacao = 'Boa noite';
+      classificacao = 'Obesidade';
     }
 
-    res.send(`${saudacao}, ${nome}!`);
+    res.send(`IMC: ${imc.toFixed(2)} - ${classificacao}`);
   } catch (error) {
     res.status(500).send('Erro: Falha no servidor.');
   }
+});
+
+app.listen(port, () => {
+  console.log(`O servidor está rodando na porta: ${port}`);
 });
