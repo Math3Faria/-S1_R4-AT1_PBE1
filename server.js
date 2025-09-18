@@ -1,4 +1,11 @@
 //atividade 04  
+const express = require('express');
+const app = express();
+const port = 2600;
+
+app.use(express.json());
+
+
 app.get('/ano/:ano', (req, res) => {
   try {
     const ano = parseInt(req.params.ano);
@@ -10,11 +17,15 @@ app.get('/ano/:ano', (req, res) => {
     const bissexto = (ano % 4 == 0 && ano % 100 !== 0) || ano % 400 == 0;
 
     if (bissexto) {
-      res.send(`O ano ${ano} é bissexto.`);
+      res.status(200).send(`O ano ${ano} é bissexto.`);
     } else {
-      res.send(`O ano ${ano} não é bissexto.`);
+      res.status(200).send(`O ano ${ano} não é bissexto.`);
     }
   } catch (error) {
     res.status(500).send('Erro: Falha no servidor.');
   }
+});
+
+app.listen(port, () => {
+  console.log(`O server está rodando na porta: ${port}`);
 });
