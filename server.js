@@ -1,4 +1,10 @@
 //atividade 05
+const express = require('express');
+const app = express();
+const port = 2600;
+
+app.use(express.json());
+
 app.get('/saudacao/:nome', (req, res) => {
   try {
     const nome = req.params.nome;
@@ -17,8 +23,12 @@ app.get('/saudacao/:nome', (req, res) => {
       saudacao = 'Boa noite';
     }
 
-    res.send(`${saudacao}, ${nome}!`);
+    res.status(200).send(`${saudacao}, ${nome}!`);
   } catch (error) {
     res.status(500).send('Erro: Falha no servidor.');
   }
+});
+
+app.listen(port, () => {
+  console.log(`O server está rodando na porta: ${port}`);
 });
