@@ -1,37 +1,19 @@
-//atividade 03
-app.get('/operacao/:tipo', (req, res) => {
+//atividade 04  
+app.get('/ano/:ano', (req, res) => {
   try {
-    const { tipo } = req.params;
-    const { numUm, numDois } = req.query;
-    const n1 = parseFloat(numUm);
-    const n2 = parseFloat(numDois);
+    const ano = parseInt(req.params.ano);
 
-    if (isNaN(n1) || isNaN(n2)) {
-      return res.status(400).send('Erro: numUm e numDois devem ser números válidos.');
+    if (isNaN(ano)) {
+      return res.status(400).send('Erro: Digite um ano válido.');
     }
 
-    let resultado;
-    switch (tipo) {
-      case 'soma':
-        resultado = n1 + n2;
-        break;
-      case 'subtracao':
-        resultado = n1 - n2;
-        break;
-      case 'multiplicacao':
-        resultado = n1 * n2;
-        break;
-      case 'divisao':
-        if (n2 === 0) {
-          return res.status(400).send('Erro: Não é possível dividir por zero.');
-        }
-        resultado = n1 / n2;
-        break;
-      default:
-        return res.status(400).send('Erro: Tipo de operação inválido. Use soma, subtracao, multiplicacao ou divisao.');
-    }
+    const bissexto = (ano % 4 == 0 && ano % 100 !== 0) || ano % 400 == 0;
 
-    res.send(`Resultado da ${tipo}: ${resultado}`);
+    if (bissexto) {
+      res.send(`O ano ${ano} é bissexto.`);
+    } else {
+      res.send(`O ano ${ano} não é bissexto.`);
+    }
   } catch (error) {
     res.status(500).send('Erro: Falha no servidor.');
   }
