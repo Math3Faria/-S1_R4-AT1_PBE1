@@ -1,79 +1,38 @@
-//atividade 01
-const express = require('express');
-const app = express();
-const port = 2600;
-
-app.use(express.json());
-
-app.get('/soma/:numUm/:numDois', (req, res) => {
+//atividade 02
+app.get('/calculadora', (req, res) => {
   try {
-    const numUm = parseFloat(req.params.numUm);
-    const numDois = parseFloat(req.params.numDois);
+    const { operacao, numUm, numDois } = req.query;
+    const n1 = parseFloat(numUm);
+    const n2 = parseFloat(numDois);
 
-    if (isNaN(numUm) || isNaN(numDois)) {
-      return res.status(400).send('Digite números');
+    if (isNaN(n1) || isNaN(n2)) {
+      return res.status(400).send('Erro: numUm e numDois devem ser números válidos.');
     }
 
-    const resultado = numUm + numDois;
-    res.send(`Soma: ${resultado}`);
+    let resultado;
+    let operacaoNome;
+
+    if (operacao === 'soma') {
+      resultado = n1 + n2;
+      operacaoNome = 'soma';
+    } else if (operacao === 'subtracao') {
+      resultado = n1 - n2;
+      operacaoNome = 'subtração';
+    } else if (operacao === 'multiplicacao') {
+      resultado = n1 * n2;
+      operacaoNome = 'multiplicação';
+    } else if (operacao === 'divisao') {
+      if (n2 === 0) {
+        return res.status(400).send('Erro: Não é possível dividir por zero.');
+      }
+      resultado = n1 / n2;
+      operacaoNome = 'divisão';
+    } else {
+      return res.status(400).send('Erro: Operação inválida. Use soma, subtracao, multiplicacao ou divisao.');
+    }
+
+    res.send(`Resultado da ${operacaoNome}: ${resultado}`);
   } catch (error) {
-    res.status(500).send('Server falhou');
+    res.status(500).send('Erro: Falha no servidor.');
   }
 });
-
-app.get('/subtracao/:numUm/:numDois', (req, res) => {
-  try {
-    const numUm = parseFloat(req.params.numUm);
-    const numDois = parseFloat(req.params.numDois);
-
-    if (isNaN(numUm) || isNaN(numDois)) {
-      return res.status(400).send('Digite números');
-    }
-
-    const resultado = numUm - numDois;
-    res.send(`Subtração: ${resultado}`);
-  } catch (error) {
-    res.status(500).send('Server falhou');
-  }
-});
-
-app.get('/multiplicacao/:numUm/:numDois', (req, res) => {
-  try {
-    const numUm = parseFloat(req.params.numUm);
-    const numDois = parseFloat(req.params.numDois);
-
-    if (isNaN(numUm) || isNaN(numDois)) {
-      return res.status(400).send('Digite números');
-    }
-
-    const resultado = numUm * numDois;
-    res.send(`Multiplicação: ${resultado}`);
-  } catch (error) {
-    res.status(500).send('Server falhou');
-  }
-});
-
-app.get('/divisao/:numUm/:numDois', (req, res) => {
-  try {
-    const numUm = parseFloat(req.params.numUm);
-    const numDois = parseFloat(req.params.numDois);
-
-    if (isNaN(numUm) || isNaN(numDois)) {
-      return res.status(400).send('Digite números');
-    }
-
-    if (numDois === 0) {
-      return res.status(400).send('Não da pra dividir por zero');
-    }
-
-    const resultado = numUm / numDois;
-    res.send(`Divisão: ${resultado}`);
-  } catch (error) {
-    res.status(500).send('Server falhou');
-  }
-});
-
-app.listen(port, () => {
-  console.log(`O server está rodando na porta: ${port}`);
-});
-
